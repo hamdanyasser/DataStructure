@@ -2745,6 +2745,717 @@ q.dequeue(); // returns 2
 
 ---
 
+# 5.9 Practice Problem Test Drivers
+
+> **📌 IMPORTANT NOTE:** Complete solution implementations are available upon explicit request. The test drivers below provide method signatures and comprehensive test cases for you to implement and verify your solutions.
+
+## How to Use These Test Drivers
+
+1. **Copy the entire test driver class** to a new `.java` file
+2. **Implement the empty methods** marked with `// TODO: Implement this`
+3. **Run the program** with assertions enabled: `java -ea ClassName`
+4. **All tests should pass** if your implementation is correct
+5. **If stuck**, review the hints in the problem description above
+6. **Request solutions** if needed after attempting the problem yourself
+
+---
+
+## Recursion Test Drivers
+
+### Test Driver 1: Subsets (Power Set)
+
+```java
+import java.util.*;
+
+public class SubsetGenerator {
+
+    /**
+     * Generate all subsets of the given array
+     * TODO: Implement this method using recursion
+     *
+     * @param nums array of distinct integers
+     * @return list of all subsets
+     */
+    public static List<List<Integer>> generateSubsets(int[] nums) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    // Helper method signature (optional - you may need this)
+    private static void backtrack(int[] nums, int index, List<Integer> current,
+                                   List<List<Integer>> result) {
+        // TODO: Implement helper if needed
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty array
+        int[] test1 = {};
+        List<List<Integer>> result1 = generateSubsets(test1);
+        assert result1.size() == 1 : "Empty array should have 1 subset";
+        System.out.println("Test 1 passed: " + result1);
+
+        // Test 2: Single element
+        int[] test2 = {1};
+        List<List<Integer>> result2 = generateSubsets(test2);
+        assert result2.size() == 2 : "Single element should have 2 subsets";
+        System.out.println("Test 2 passed: " + result2);
+
+        // Test 3: Two elements
+        int[] test3 = {1, 2};
+        List<List<Integer>> result3 = generateSubsets(test3);
+        assert result3.size() == 4 : "Two elements should have 4 subsets";
+        System.out.println("Test 3 passed: " + result3);
+
+        // Test 4: Three elements
+        int[] test4 = {1, 2, 3};
+        List<List<Integer>> result4 = generateSubsets(test4);
+        assert result4.size() == 8 : "Three elements should have 8 subsets (2^3)";
+        System.out.println("Test 4 passed: " + result4);
+
+        // Test 5: Four elements
+        int[] test5 = {1, 2, 3, 4};
+        List<List<Integer>> result5 = generateSubsets(test5);
+        assert result5.size() == 16 : "Four elements should have 16 subsets (2^4)";
+        System.out.println("Test 5 passed: " + result5);
+
+        System.out.println("\n✅ All subset generation tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 2: Count Occurrences
+
+```java
+public class CountOccurrences {
+
+    /**
+     * Count occurrences of target in array using recursion
+     * TODO: Implement this method
+     *
+     * @param arr the array to search
+     * @param target value to count
+     * @param index starting index
+     * @return count of target in array
+     */
+    public static int countOccurrences(int[] arr, int target, int index) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    // Wrapper method for convenience
+    public static int countOccurrences(int[] arr, int target) {
+        return countOccurrences(arr, target, 0);
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty array
+        int[] test1 = {};
+        assert countOccurrences(test1, 5) == 0 : "Empty array should return 0";
+        System.out.println("Test 1 passed: empty array");
+
+        // Test 2: No occurrences
+        int[] test2 = {1, 2, 3, 4};
+        assert countOccurrences(test2, 5) == 0 : "Should return 0 when not found";
+        System.out.println("Test 2 passed: no occurrences");
+
+        // Test 3: Single occurrence
+        int[] test3 = {1, 2, 3, 4, 5};
+        assert countOccurrences(test3, 3) == 1 : "Should return 1";
+        System.out.println("Test 3 passed: single occurrence");
+
+        // Test 4: Multiple occurrences
+        int[] test4 = {1, 2, 3, 2, 4, 2};
+        assert countOccurrences(test4, 2) == 3 : "Should return 3";
+        System.out.println("Test 4 passed: multiple occurrences");
+
+        // Test 5: All same value
+        int[] test5 = {7, 7, 7, 7, 7};
+        assert countOccurrences(test5, 7) == 5 : "Should return 5";
+        System.out.println("Test 5 passed: all same value");
+
+        // Test 6: First and last
+        int[] test6 = {5, 1, 2, 3, 5};
+        assert countOccurrences(test6, 5) == 2 : "Should return 2";
+        System.out.println("Test 6 passed: first and last");
+
+        System.out.println("\n✅ All count occurrences tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 3: Merge Sort
+
+```java
+import java.util.Arrays;
+
+public class MergeSortRecursive {
+
+    /**
+     * Sort array using merge sort (recursive)
+     * TODO: Implement this method
+     *
+     * @param arr array to sort
+     * @param left starting index
+     * @param right ending index
+     */
+    public static void mergeSort(int[] arr, int left, int right) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Merge two sorted subarrays
+     * TODO: Implement this helper method
+     */
+    private static void merge(int[] arr, int left, int mid, int right) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    // Wrapper method for convenience
+    public static void mergeSort(int[] arr) {
+        if (arr.length > 0) {
+            mergeSort(arr, 0, arr.length - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty array
+        int[] test1 = {};
+        mergeSort(test1);
+        assert Arrays.equals(test1, new int[]{}) : "Empty array unchanged";
+        System.out.println("Test 1 passed: " + Arrays.toString(test1));
+
+        // Test 2: Single element
+        int[] test2 = {42};
+        mergeSort(test2);
+        assert Arrays.equals(test2, new int[]{42}) : "Single element unchanged";
+        System.out.println("Test 2 passed: " + Arrays.toString(test2));
+
+        // Test 3: Already sorted
+        int[] test3 = {1, 2, 3, 4, 5};
+        mergeSort(test3);
+        assert Arrays.equals(test3, new int[]{1, 2, 3, 4, 5}) : "Already sorted";
+        System.out.println("Test 3 passed: " + Arrays.toString(test3));
+
+        // Test 4: Reverse sorted
+        int[] test4 = {5, 4, 3, 2, 1};
+        mergeSort(test4);
+        assert Arrays.equals(test4, new int[]{1, 2, 3, 4, 5}) : "Reverse sorted";
+        System.out.println("Test 4 passed: " + Arrays.toString(test4));
+
+        // Test 5: Random order
+        int[] test5 = {38, 27, 43, 3, 9, 82, 10};
+        mergeSort(test5);
+        assert Arrays.equals(test5, new int[]{3, 9, 10, 27, 38, 43, 82}) : "Random order";
+        System.out.println("Test 5 passed: " + Arrays.toString(test5));
+
+        // Test 6: Duplicates
+        int[] test6 = {4, 2, 4, 1, 3, 2};
+        mergeSort(test6);
+        assert Arrays.equals(test6, new int[]{1, 2, 2, 3, 4, 4}) : "With duplicates";
+        System.out.println("Test 6 passed: " + Arrays.toString(test6));
+
+        System.out.println("\n✅ All merge sort tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 4: Path Sum in Binary Tree
+
+```java
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+    }
+
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+public class PathSumBinaryTree {
+
+    /**
+     * Check if there exists a root-to-leaf path with given sum
+     * TODO: Implement this method
+     *
+     * @param root root of binary tree
+     * @param targetSum target sum to find
+     * @return true if path exists, false otherwise
+     */
+    public static boolean hasPathSum(TreeNode root, int targetSum) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty tree
+        assert !hasPathSum(null, 0) : "Null tree should return false";
+        System.out.println("Test 1 passed: null tree");
+
+        // Test 2: Single node matching
+        TreeNode test2 = new TreeNode(5);
+        assert hasPathSum(test2, 5) : "Single node with matching value";
+        System.out.println("Test 2 passed: single node match");
+
+        // Test 3: Single node not matching
+        TreeNode test3 = new TreeNode(5);
+        assert !hasPathSum(test3, 10) : "Single node not matching";
+        System.out.println("Test 3 passed: single node no match");
+
+        // Test 4: Left path exists
+        //     5
+        //    / \
+        //   4   8
+        //  /
+        // 11
+        TreeNode test4 = new TreeNode(5);
+        test4.left = new TreeNode(4);
+        test4.right = new TreeNode(8);
+        test4.left.left = new TreeNode(11);
+        assert hasPathSum(test4, 20) : "Path 5->4->11 = 20";
+        System.out.println("Test 4 passed: left path");
+
+        // Test 5: Right path exists
+        assert hasPathSum(test4, 13) : "Path 5->8 = 13";
+        System.out.println("Test 5 passed: right path");
+
+        // Test 6: Complex tree
+        //       5
+        //      / \
+        //     4   8
+        //    /   / \
+        //   11  13  4
+        //  /  \      \
+        // 7    2      1
+        TreeNode test6 = new TreeNode(5);
+        test6.left = new TreeNode(4);
+        test6.right = new TreeNode(8);
+        test6.left.left = new TreeNode(11);
+        test6.left.left.left = new TreeNode(7);
+        test6.left.left.right = new TreeNode(2);
+        test6.right.left = new TreeNode(13);
+        test6.right.right = new TreeNode(4);
+        test6.right.right.right = new TreeNode(1);
+
+        assert hasPathSum(test6, 22) : "Path 5->4->11->2 = 22";
+        assert hasPathSum(test6, 26) : "Path 5->8->13 = 26";
+        assert hasPathSum(test6, 18) : "Path 5->8->4->1 = 18";
+        assert !hasPathSum(test6, 100) : "No path with sum 100";
+        System.out.println("Test 6 passed: complex tree");
+
+        System.out.println("\n✅ All path sum tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 5: String Permutations
+
+```java
+import java.util.*;
+
+public class StringPermutations {
+
+    /**
+     * Generate all permutations of a string
+     * TODO: Implement this method
+     *
+     * @param str input string
+     * @return list of all permutations
+     */
+    public static List<String> generatePermutations(String str) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    // Helper method signature (optional)
+    private static void backtrack(char[] chars, boolean[] used,
+                                   StringBuilder current, List<String> result) {
+        // TODO: Implement helper if needed
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty string
+        List<String> test1 = generatePermutations("");
+        assert test1.size() == 1 && test1.get(0).equals("") : "Empty string";
+        System.out.println("Test 1 passed: " + test1);
+
+        // Test 2: Single character
+        List<String> test2 = generatePermutations("A");
+        assert test2.size() == 1 && test2.contains("A") : "Single char";
+        System.out.println("Test 2 passed: " + test2);
+
+        // Test 3: Two characters
+        List<String> test3 = generatePermutations("AB");
+        assert test3.size() == 2 : "Two chars should have 2! = 2 permutations";
+        assert test3.contains("AB") && test3.contains("BA") : "Should contain AB and BA";
+        System.out.println("Test 3 passed: " + test3);
+
+        // Test 4: Three characters
+        List<String> test4 = generatePermutations("ABC");
+        assert test4.size() == 6 : "Three chars should have 3! = 6 permutations";
+        Set<String> expected4 = Set.of("ABC", "ACB", "BAC", "BCA", "CAB", "CBA");
+        assert new HashSet<>(test4).equals(expected4) : "Should contain all 6 permutations";
+        System.out.println("Test 4 passed: " + test4);
+
+        // Test 5: Four characters (larger test)
+        List<String> test5 = generatePermutations("ABCD");
+        assert test5.size() == 24 : "Four chars should have 4! = 24 permutations";
+        assert new HashSet<>(test5).size() == 24 : "All should be unique";
+        System.out.println("Test 5 passed: " + test5.size() + " permutations generated");
+
+        System.out.println("\n✅ All string permutation tests passed!");
+    }
+}
+```
+
+---
+
+## Stack Test Drivers
+
+### Test Driver 6: Queue Using Two Stacks
+
+```java
+import java.util.Stack;
+
+class QueueUsingStacks {
+
+    // TODO: Declare your instance variables here
+    // Hint: You need two stacks
+
+    /**
+     * Initialize your data structure
+     */
+    public QueueUsingStacks() {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Add element to rear of queue
+     * TODO: Implement this - should be O(1)
+     */
+    public void enqueue(int x) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Remove element from front of queue
+     * TODO: Implement this - amortized O(1)
+     */
+    public int dequeue() {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Get front element without removing
+     * TODO: Implement this
+     */
+    public int peek() {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Check if queue is empty
+     * TODO: Implement this
+     */
+    public boolean isEmpty() {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        QueueUsingStacks q = new QueueUsingStacks();
+
+        // Test 1: Empty queue
+        assert q.isEmpty() : "New queue should be empty";
+        System.out.println("Test 1 passed: empty queue");
+
+        // Test 2: Single enqueue and dequeue
+        q.enqueue(1);
+        assert !q.isEmpty() : "Queue should not be empty";
+        assert q.dequeue() == 1 : "Should return 1";
+        assert q.isEmpty() : "Queue should be empty after dequeue";
+        System.out.println("Test 2 passed: single enqueue/dequeue");
+
+        // Test 3: FIFO order
+        q.enqueue(1);
+        q.enqueue(2);
+        q.enqueue(3);
+        assert q.dequeue() == 1 : "First in, first out";
+        assert q.dequeue() == 2 : "Second element";
+        assert q.dequeue() == 3 : "Third element";
+        System.out.println("Test 3 passed: FIFO order");
+
+        // Test 4: Interleaved operations
+        q.enqueue(1);
+        q.enqueue(2);
+        assert q.dequeue() == 1 : "Dequeue 1";
+        q.enqueue(3);
+        q.enqueue(4);
+        assert q.dequeue() == 2 : "Dequeue 2";
+        assert q.dequeue() == 3 : "Dequeue 3";
+        assert q.dequeue() == 4 : "Dequeue 4";
+        System.out.println("Test 4 passed: interleaved operations");
+
+        // Test 5: Peek
+        q.enqueue(5);
+        q.enqueue(6);
+        assert q.peek() == 5 : "Peek should return 5";
+        assert q.peek() == 5 : "Peek should not remove";
+        assert q.dequeue() == 5 : "Dequeue should return 5";
+        assert q.peek() == 6 : "Peek should now return 6";
+        System.out.println("Test 5 passed: peek operation");
+
+        System.out.println("\n✅ All queue using stacks tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 7: Largest Rectangle in Histogram
+
+```java
+import java.util.Stack;
+
+public class LargestRectangleHistogram {
+
+    /**
+     * Find area of largest rectangle in histogram
+     * TODO: Implement this using a stack
+     *
+     * @param heights array of bar heights
+     * @return area of largest rectangle
+     */
+    public static int largestRectangleArea(int[] heights) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Empty array
+        assert largestRectangleArea(new int[]{}) == 0 : "Empty should return 0";
+        System.out.println("Test 1 passed: empty histogram");
+
+        // Test 2: Single bar
+        assert largestRectangleArea(new int[]{5}) == 5 : "Single bar";
+        System.out.println("Test 2 passed: single bar");
+
+        // Test 3: All same height
+        assert largestRectangleArea(new int[]{2, 2, 2, 2}) == 8 : "All same height";
+        System.out.println("Test 3 passed: uniform height");
+
+        // Test 4: Increasing heights
+        assert largestRectangleArea(new int[]{1, 2, 3, 4, 5}) == 9 : "Increasing";
+        System.out.println("Test 4 passed: increasing heights");
+
+        // Test 5: Decreasing heights
+        assert largestRectangleArea(new int[]{5, 4, 3, 2, 1}) == 9 : "Decreasing";
+        System.out.println("Test 5 passed: decreasing heights");
+
+        // Test 6: Example from problem
+        assert largestRectangleArea(new int[]{2, 1, 5, 6, 2, 3}) == 10 : "Example case";
+        System.out.println("Test 6 passed: example case");
+
+        // Test 7: Large rectangle in middle
+        assert largestRectangleArea(new int[]{2, 4}) == 4 : "Two bars";
+        System.out.println("Test 7 passed: two bars");
+
+        System.out.println("\n✅ All largest rectangle tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 8: Simplify Unix Path
+
+```java
+import java.util.Stack;
+
+public class SimplifyPath {
+
+    /**
+     * Simplify Unix-style file path
+     * TODO: Implement this using a stack
+     *
+     * @param path absolute path to simplify
+     * @return simplified canonical path
+     */
+    public static String simplifyPath(String path) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Simple path
+        assert simplifyPath("/home/").equals("/home") : "Remove trailing slash";
+        System.out.println("Test 1 passed: /home/ -> " + simplifyPath("/home/"));
+
+        // Test 2: Current directory
+        assert simplifyPath("/a/./b/").equals("/a/b") : "Remove current directory";
+        System.out.println("Test 2 passed: /a/./b/ -> " + simplifyPath("/a/./b/"));
+
+        // Test 3: Parent directory
+        assert simplifyPath("/a/b/../c/").equals("/a/c") : "Handle parent directory";
+        System.out.println("Test 3 passed: /a/b/../c/ -> " + simplifyPath("/a/b/../c/"));
+
+        // Test 4: Multiple parent directories
+        assert simplifyPath("/a/./b/../../c/").equals("/c") : "Multiple parent dirs";
+        System.out.println("Test 4 passed: /a/./b/../../c/ -> " + simplifyPath("/a/./b/../../c/"));
+
+        // Test 5: Parent at root
+        assert simplifyPath("/../").equals("/") : "Parent at root stays at root";
+        System.out.println("Test 5 passed: /../ -> " + simplifyPath("/../"));
+
+        // Test 6: Multiple slashes
+        assert simplifyPath("/home//foo/").equals("/home/foo") : "Multiple slashes";
+        System.out.println("Test 6 passed: /home//foo/ -> " + simplifyPath("/home//foo/"));
+
+        // Test 7: Complex path
+        assert simplifyPath("/a/../../b/../c//.//").equals("/c") : "Complex path";
+        System.out.println("Test 7 passed: complex path -> " + simplifyPath("/a/../../b/../c//.//"));
+
+        // Test 8: Root only
+        assert simplifyPath("/").equals("/") : "Root only";
+        System.out.println("Test 8 passed: / -> " + simplifyPath("/"));
+
+        System.out.println("\n✅ All simplify path tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 9: Daily Temperatures
+
+```java
+import java.util.Arrays;
+import java.util.Stack;
+
+public class DailyTemperatures {
+
+    /**
+     * Calculate days until warmer temperature for each day
+     * TODO: Implement this using a stack
+     *
+     * @param temperatures array of daily temperatures
+     * @return array of days to wait for warmer temperature
+     */
+    public static int[] dailyTemperatures(int[] temperatures) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Single day
+        int[] test1 = {30};
+        assert Arrays.equals(dailyTemperatures(test1), new int[]{0}) : "Single day";
+        System.out.println("Test 1 passed: " + Arrays.toString(dailyTemperatures(test1)));
+
+        // Test 2: All increasing
+        int[] test2 = {30, 40, 50, 60};
+        assert Arrays.equals(dailyTemperatures(test2), new int[]{1, 1, 1, 0}) : "All increasing";
+        System.out.println("Test 2 passed: " + Arrays.toString(dailyTemperatures(test2)));
+
+        // Test 3: All decreasing
+        int[] test3 = {60, 50, 40, 30};
+        assert Arrays.equals(dailyTemperatures(test3), new int[]{0, 0, 0, 0}) : "All decreasing";
+        System.out.println("Test 3 passed: " + Arrays.toString(dailyTemperatures(test3)));
+
+        // Test 4: Example from problem
+        int[] test4 = {73, 74, 75, 71, 69, 72, 76, 73};
+        int[] expected4 = {1, 1, 4, 2, 1, 1, 0, 0};
+        assert Arrays.equals(dailyTemperatures(test4), expected4) : "Example case";
+        System.out.println("Test 4 passed: " + Arrays.toString(dailyTemperatures(test4)));
+
+        // Test 5: Mixed temperatures
+        int[] test5 = {30, 60, 90};
+        assert Arrays.equals(dailyTemperatures(test5), new int[]{1, 1, 0}) : "Mixed temps";
+        System.out.println("Test 5 passed: " + Arrays.toString(dailyTemperatures(test5)));
+
+        System.out.println("\n✅ All daily temperatures tests passed!");
+    }
+}
+```
+
+---
+
+### Test Driver 10: Remove K Digits
+
+```java
+import java.util.Stack;
+
+public class RemoveKDigits {
+
+    /**
+     * Remove k digits to make smallest possible number
+     * TODO: Implement this using a monotonic stack
+     *
+     * @param num string representing number
+     * @param k number of digits to remove
+     * @return smallest possible number as string
+     */
+    public static String removeKdigits(String num, int k) {
+        // TODO: Implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void main(String[] args) {
+        // Test 1: Remove leading larger digits
+        assert removeKdigits("1432219", 3).equals("1219") : "Example case";
+        System.out.println("Test 1 passed: 1432219, k=3 -> " + removeKdigits("1432219", 3));
+
+        // Test 2: Remove all digits
+        assert removeKdigits("10", 2).equals("0") : "Remove all";
+        System.out.println("Test 2 passed: 10, k=2 -> " + removeKdigits("10", 2));
+
+        // Test 3: Already optimal
+        assert removeKdigits("123456", 0).equals("123456") : "k=0";
+        System.out.println("Test 3 passed: 123456, k=0 -> " + removeKdigits("123456", 0));
+
+        // Test 4: Leading zeros
+        assert removeKdigits("10200", 1).equals("200") : "Leading zeros";
+        System.out.println("Test 4 passed: 10200, k=1 -> " + removeKdigits("10200", 1));
+
+        // Test 5: All same digits
+        assert removeKdigits("1111", 2).equals("11") : "All same";
+        System.out.println("Test 5 passed: 1111, k=2 -> " + removeKdigits("1111", 2));
+
+        // Test 6: Decreasing digits
+        assert removeKdigits("9876543210", 5).equals("43210") : "Decreasing";
+        System.out.println("Test 6 passed: 9876543210, k=5 -> " + removeKdigits("9876543210", 5));
+
+        // Test 7: Result is zero
+        assert removeKdigits("10", 1).equals("0") : "Result zero";
+        System.out.println("Test 7 passed: 10, k=1 -> " + removeKdigits("10", 1));
+
+        System.out.println("\n✅ All remove k digits tests passed!");
+    }
+}
+```
+
+---
+
 # 6. COMPREHENSIVE EXAM CHECKLISTS
 
 ## 6.1 Recursion Exam Checklist
