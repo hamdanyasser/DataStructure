@@ -2532,6 +2532,508 @@ void dfsIterative(Node root) {
 
 ---
 
+# 6. COMPREHENSIVE EXAM CHECKLISTS
+
+## 6.1 Recursion Exam Checklist
+
+### Must-Know Concepts
+- [ ] **Definition:** Function calls itself with smaller/simpler input
+- [ ] **Two parts:** Base case (stops recursion) + Recursive case (makes progress)
+- [ ] **Call stack:** Each call creates stack frame, popped when function returns
+- [ ] **Progress:** Must move toward base case every call
+- [ ] **Trust:** Assume recursion works for smaller input (leap of faith)
+
+### Implementation Checklist
+- [ ] Identify simplest input (base case)
+- [ ] Define what base case returns
+- [ ] Determine how to make problem smaller
+- [ ] Ensure progress toward base case
+- [ ] Combine recursive result with current level
+- [ ] Handle edge cases (empty, zero, negative, single element)
+
+### Common Patterns to Memorize
+- [ ] **Linear:** One recursive call (factorial, sum, search)
+- [ ] **Binary:** Two recursive calls (Fibonacci, tree traversal)
+- [ ] **Tail:** Recursive call is last operation (can optimize)
+- [ ] **Divide-and-conquer:** Split in half (binary search, merge sort)
+
+### Complexity Quick Reference
+- [ ] T(n) = T(n-1) + O(1) → **O(n)** time, **O(n)** space
+- [ ] T(n) = 2T(n-1) + O(1) → **O(2^n)** time (naive Fibonacci)
+- [ ] T(n) = T(n/2) + O(1) → **O(log n)** time (binary search)
+- [ ] T(n) = 2T(n/2) + O(n) → **O(n log n)** time (merge sort)
+
+### Common Mistakes to Avoid
+- [ ] ❌ Missing base case → infinite recursion
+- [ ] ❌ Wrong base case → incorrect result or doesn't terminate
+- [ ] ❌ Not making progress → infinite loop
+- [ ] ❌ Overlapping subproblems without memoization → exponential time
+- [ ] ❌ Deep recursion → stack overflow
+
+### Exam Problem Types
+- [ ] Factorial/power calculations
+- [ ] Array sum/max/min
+- [ ] String reversal/palindrome
+- [ ] Binary search
+- [ ] Fibonacci sequence
+- [ ] Count digits/characters
+- [ ] GCD (Euclid's algorithm)
+- [ ] Tower of Hanoi
+
+---
+
+## 6.2 Stack Exam Checklist
+
+### Must-Know Concepts
+- [ ] **LIFO:** Last In, First Out
+- [ ] **Top:** Only access point (like stack of plates)
+- [ ] **Core ops:** push, pop, peek, isEmpty - all **O(1)**
+- [ ] **Two implementations:** Array-based (fixed size) vs Linked List (unlimited)
+
+### Array-Based Stack
+- [ ] Structure: `int[] array`, `int top`, `int capacity`
+- [ ] Empty: `top = -1`
+- [ ] Full: `top = capacity - 1`
+- [ ] Size: `top + 1`
+- [ ] Push: Check full, then `array[++top] = item`
+- [ ] Pop: Check empty, then `return array[top--]`
+- [ ] Peek: `return array[top]` (no size change)
+
+### Linked List-Based Stack
+- [ ] Structure: `Node top`, `int size`
+- [ ] Empty: `top = null`
+- [ ] No capacity limit (until heap exhaustion)
+- [ ] Push: Create node, set `next = top`, update `top`
+- [ ] Pop: Save data, `top = top.next`, return data
+- [ ] Peek: `return top.data`
+
+### Applications to Know
+- [ ] **Balanced parentheses** - push openers, pop on closers
+- [ ] **Postfix evaluation** - push operands, pop for operators
+- [ ] **Reversing** - push all, pop all
+- [ ] **DFS/Backtracking** - push states, pop to backtrack
+- [ ] **Function calls** - recursion uses call stack
+- [ ] **Undo/Redo** - stack of states
+
+### Recursion ↔ Stack
+- [ ] Recursion IS implicit stack (call stack)
+- [ ] Can convert any recursion to iteration with explicit stack
+- [ ] Stack overflow from too-deep recursion
+- [ ] Explicit stack uses heap (larger than call stack)
+
+### Common Mistakes to Avoid
+- [ ] ❌ Pop from empty → underflow
+- [ ] ❌ Push to full array → overflow
+- [ ] ❌ Forget to check isEmpty before peek/pop
+- [ ] ❌ Wrong size calculation: `return top` instead of `top + 1`
+- [ ] ❌ Not updating top pointer in linked list
+
+### Exam Problem Types
+- [ ] Implement stack (array or linked list)
+- [ ] Balanced parentheses/brackets
+- [ ] Evaluate postfix expression
+- [ ] Reverse string/array using stack
+- [ ] Next greater element (monotonic stack)
+- [ ] Min/Max stack with O(1) operations
+- [ ] Valid push/pop sequences
+- [ ] Convert recursion to iteration
+
+---
+
+## 6.3 Quick Decision Trees
+
+### "Should I use recursion?"
+
+```
+Is problem naturally recursive (trees, divide-and-conquer)?
+├─ YES → Use recursion
+│   └─ Will recursion be deep (>1000 calls)?
+│       ├─ YES → Use iteration with explicit stack OR tail recursion
+│       └─ NO → Recursion is fine
+│
+└─ NO → Is iterative solution clearer?
+    ├─ YES → Use iteration
+    └─ NO → Recursion might be cleaner
+```
+
+### "Should I use a stack?"
+
+```
+What access pattern do I need?
+├─ LIFO (last in, first out) → Stack
+├─ FIFO (first in, first out) → Queue
+├─ Random access by index → Array/ArrayList
+└─ Fast search → HashSet/HashMap
+
+Do I need to:
+├─ Reverse something? → Stack
+├─ Match pairs (parentheses)? → Stack
+├─ Backtrack? → Stack
+├─ DFS? → Stack (BFS uses queue)
+└─ Track nested structure? → Stack
+```
+
+### "Array-based or Linked List stack?"
+
+```
+Do I know the maximum size?
+├─ YES → Array-based (simpler, faster, cache-friendly)
+└─ NO → Linked List (no resize, unlimited*)
+    *until heap exhausted
+```
+
+---
+
+# 7. SENTENCE TEMPLATES FOR EXAM ANSWERS
+
+## 7.1 Recursion Templates
+
+### Explaining Base Case
+> "The base case occurs when **[condition]**, at which point we return **[value]** because **[reason - this is the simplest case]**."
+
+**Example:**
+> "The base case occurs when **n ≤ 1**, at which point we return **1** because **the factorial of 0 or 1 is defined as 1, and this is the simplest case that doesn't require further recursion**."
+
+### Explaining Recursive Case
+> "In the recursive case, we **[action on current level]** and then **[recursive call with smaller input]**. This works because **[why the smaller problem helps solve the larger one]**."
+
+**Example:**
+> "In the recursive case, we **multiply n by** the result of **factorial(n-1)**. This works because **n! = n × (n-1)!, so solving for (n-1)! and multiplying by n gives us n!**."
+
+### Explaining Complexity
+> "The time complexity is **O([complexity])** because **[reason: number of calls × work per call]**. The space complexity is **O([complexity])** due to **[call stack depth]**."
+
+**Example:**
+> "The time complexity is **O(n)** because **we make n recursive calls, each doing O(1) work**. The space complexity is **O(n)** due to **the call stack storing n stack frames at maximum depth**."
+
+### Explaining Why Recursion Works
+> "This recursive solution works by **[breaking down the problem]**. At each level, we **[reduce the problem size by X]**, ensuring we eventually reach the base case of **[base condition]**. The results are combined by **[how we use the recursive return value]**."
+
+---
+
+## 7.2 Stack Templates
+
+### Explaining Stack Choice
+> "A stack is appropriate for this problem because **[LIFO property/matching pairs/backtracking/reversal]**, which aligns with **[specific requirement of the problem]**."
+
+**Example:**
+> "A stack is appropriate for this problem because **we need to match opening and closing parentheses**, which aligns with **the LIFO property: the most recently seen opening bracket should match the next closing bracket**."
+
+### Describing Stack Operations
+> "We **push [what]** onto the stack when **[condition]**, and **pop** when **[condition]**. An empty stack at the end indicates **[meaning]**."
+
+**Example:**
+> "We **push opening brackets** onto the stack when **we encounter '(', '[', or '{'**, and **pop** when **we encounter a closing bracket to verify it matches the most recent opener**. An empty stack at the end indicates **all brackets were properly matched**."
+
+### Array-based Implementation Explanation
+> "For the array-based implementation, we maintain a **top index initialized to -1** indicating an empty stack. When pushing, we **increment top and place the element at array[top]**. When popping, we **return array[top] and decrement top**. The stack is full when **top == capacity - 1**."
+
+### Linked List Implementation Explanation
+> "For the linked list implementation, **top points to the head of the list**. Pushing creates a new node and **sets its next to the current top, then updates top to the new node**. Popping **saves top's data, moves top to top.next, and returns the saved data**. The stack is empty when **top == null**."
+
+### Complexity Explanation
+> "All stack operations (push, pop, peek, isEmpty) are **O(1)** because **[reason: direct access to top, no traversal needed]**. The space complexity is **O(n)** where n is **[number of elements in stack]**."
+
+---
+
+## 7.3 Problem-Solving Templates
+
+### For "Implement X" Questions
+1. "I will implement **[data structure/algorithm]** using **[approach]**."
+2. "The key components are: **[list main parts]**."
+3. "The algorithm works as follows: **[step-by-step]**."
+4. "Edge cases to handle: **[list edge cases]**."
+5. "Time complexity: **O([X])**, Space complexity: **O([Y])**."
+
+### For "Analyze Complexity" Questions
+1. "Let n = **[what n represents]**."
+2. "The algorithm performs **[number of operations]** operations."
+3. "Each operation takes **O([X])**."
+4. "Total time complexity: **O([result])**."
+5. "Space complexity is **O([Y])** due to **[reason: recursion depth/stack usage/auxiliary space]**."
+
+### For "Trace Execution" Questions
+1. "Initial state: **[describe]**."
+2. "Step 1: **[action]** → Result: **[state]**."
+3. "Step 2: **[action]** → Result: **[state]**."
+4. (Continue for all steps)
+5. "Final state: **[result]**."
+
+### For "Compare Approaches" Questions
+1. "**Approach 1 ([name])**: **[brief description]**. Time: **O([X])**, Space: **O([Y])**. Advantage: **[X]**. Disadvantage: **[Y]**."
+2. "**Approach 2 ([name])**: **[brief description]**. Time: **O([X])**, Space: **O([Y])**. Advantage: **[X]**. Disadvantage: **[Y]**."
+3. "I would choose **[approach]** because **[reasoning based on requirements]**."
+
+---
+
+# 8. CONCISE MEMORIZABLE CHEAT SHEET
+
+## 8.1 Recursion - The 5 Essentials
+
+### 1️⃣ Structure Template
+```java
+returnType func(params) {
+    // BASE: Simplest case
+    if (baseCondition) return baseValue;
+
+    // RECURSIVE: Smaller problem
+    result = func(smallerInput);
+
+    // COMBINE: Use result
+    return combineLogic(result);
+}
+```
+
+### 2️⃣ The 3 Questions
+1. **What's the simplest input?** → Base case
+2. **How to make it smaller?** → Recursive call
+3. **How to combine results?** → Return logic
+
+### 3️⃣ Complexity Patterns
+| Pattern | Time | Space | Example |
+|---------|------|-------|---------|
+| `T(n) = T(n-1) + c` | O(n) | O(n) | factorial |
+| `T(n) = 2T(n-1) + c` | O(2^n) | O(n) | naive fib |
+| `T(n) = T(n/2) + c` | O(log n) | O(log n) | binary search |
+| `T(n) = 2T(n/2) + n` | O(n log n) | O(log n) | merge sort |
+
+### 4️⃣ Common Patterns
+- **Sum array:** `base: i >= len → 0`, `rec: arr[i] + sum(i+1)`
+- **Factorial:** `base: n ≤ 1 → 1`, `rec: n * fact(n-1)`
+- **Power:** `base: n=0 → 1`, `rec: x * pow(x,n-1)` or `pow(x,n/2)²`
+- **Binary search:** `base: left > right → -1`, `rec: search half`
+
+### 5️⃣ Red Flags
+- ❌ No base case = infinite recursion
+- ❌ Not progressing = infinite loop
+- ❌ Deep recursion = stack overflow
+- ❌ Overlapping subproblems = use memoization!
+
+---
+
+## 8.2 Stack - The 4 Pillars
+
+### 1️⃣ Core Principle: **LIFO**
+```
+push(3) → [3]
+push(5) → [3, 5]
+pop()   → [3]     returns 5
+peek()  → [3]     returns 3 (no change)
+```
+
+### 2️⃣ Two Implementations
+
+**Array:**
+```java
+int[] arr; int top = -1; int capacity;
+push: arr[++top] = x         // O(1)
+pop:  return arr[top--]      // O(1)
+size: top + 1
+empty: top == -1
+full: top == capacity - 1
+```
+
+**Linked List:**
+```java
+Node top; int size;
+push: new.next=top; top=new  // O(1)
+pop:  data=top.data; top=top.next  // O(1)
+size: size field
+empty: top == null
+full: never (until heap exhausted)
+```
+
+### 3️⃣ When to Use
+| Problem Keywords | Use Stack? |
+|-----------------|------------|
+| "Balanced", "Valid", "Matching" | ✅ YES |
+| "Reverse" | ✅ YES |
+| "DFS", "Backtrack" | ✅ YES |
+| "Next greater/smaller" | ✅ YES (monotonic) |
+| "Undo/Redo" | ✅ YES |
+| "FIFO", "Queue" | ❌ NO |
+| "Random access by index" | ❌ NO |
+
+### 4️⃣ Classic Algorithms
+
+**Balanced Parentheses:**
+```
+for each char:
+  if opener → push
+  if closer → pop & check match
+end: stack must be empty
+```
+
+**Postfix Eval:**
+```
+for each token:
+  if number → push
+  if operator → pop 2, compute, push result
+end: stack has 1 element (answer)
+```
+
+**Monotonic Stack (Next Greater):**
+```
+result = [-1] * n
+stack = []
+for i from n-1 to 0:
+  while stack not empty and stack.top ≤ arr[i]:
+    stack.pop()
+  if stack not empty: result[i] = stack.top
+  stack.push(arr[i])
+```
+
+---
+
+## 8.3 Critical Facts to Memorize
+
+### Recursion
+- **Stack frame:** params + local vars + return address
+- **Stack overflow:** ~1000-10000 calls in Java (default ~1MB)
+- **Tail recursion:** Last operation is recursive call (optimizable)
+- **Memoization:** Cache results to avoid recomputation
+
+### Stack
+- **Underflow:** Pop from empty → `EmptyStackException`
+- **Overflow:** Push to full array → `StackOverflowError`
+- **Recursion ≡ Stack:** Can always convert recursion to iteration with explicit stack
+- **DFS vs BFS:** DFS uses stack, BFS uses queue
+
+### Complexity
+- **Array stack:** O(1) all ops, O(capacity) space
+- **Linked stack:** O(1) all ops, O(n) space + pointer overhead
+- **Recursion space:** O(depth) for call stack
+- **Array-based faster:** Cache-friendly, contiguous memory
+
+---
+
+## 8.4 The Ultimate 1-Page Cheat Sheet
+
+### RECURSION
+```
+BASE CASE → Simplest input, no recursion
+RECURSIVE CASE → Smaller input, trust it works
+PROGRESS → Must move toward base
+COMBINE → Use result from smaller problem
+
+PATTERNS:
+  Factorial: n * f(n-1)             O(n)
+  Fibonacci: f(n-1) + f(n-2)        O(2^n) → memoize!
+  BinSearch: search(left/right half) O(log n)
+  Sum: arr[i] + sum(arr,i+1)        O(n)
+```
+
+### STACK (LIFO)
+```
+ARRAY: top=-1, push: arr[++top]=x, pop: arr[top--]
+LINKED: top=head, push: new→top→..., pop: top=top.next
+
+APPLICATIONS:
+  Balance ( ) [ ] { } → push opener, pop & match closer
+  Postfix → push numbers, pop for operators
+  Reverse → push all, pop all
+  DFS → push neighbors, pop to visit
+
+ERRORS:
+  Empty: top=-1 (array) or top=null (linked)
+  Full: top=capacity-1 (array only)
+```
+
+### COMPLEXITY QUICK GUIDE
+```
+RECURSION:
+  Linear (T(n)=T(n-1)+c): O(n) time, O(n) space
+  Binary (T(n)=2T(n-1)+c): O(2^n) time, O(n) space
+  Divide (T(n)=T(n/2)+c): O(log n) time, O(log n) space
+
+STACK:
+  All operations: O(1)
+  Space: O(n) for n elements
+```
+
+### EXAM DAY CHECKLIST
+```
+RECURSION:
+  ☑ Base case defined?
+  ☑ Makes progress toward base?
+  ☑ Handles edge cases (0, 1, empty, negative)?
+  ☑ Complexity analyzed?
+
+STACK:
+  ☑ Check empty before pop/peek?
+  ☑ Check full before push (array)?
+  ☑ Update top correctly?
+  ☑ Size = top + 1 (array)?
+  ☑ Correct LIFO behavior?
+```
+
+---
+
+## 8.5 Memory Hooks & Mnemonics
+
+### RECURSION = "BBC"
+- **B**ase case: Where it stops
+- **B**reak down: Make problem smaller
+- **C**ombine: Use recursive result
+
+### STACK = "LIFO-DUMPR"
+- **L**ast **I**n **F**irst **O**ut
+- **D**epth-first search
+- **U**ndo operations
+- **M**atching pairs
+- **P**ostfix evaluation
+- **R**eversal
+
+### Complexity Memory Trick
+- **"Minus one, N":** T(n) = T(n-**1**) + c → O(**n**)
+- **"Two times, TWO power":** T(n) = **2**T(n-1) + c → O(**2^n**)
+- **"Divide two, LOG":** T(n) = T(n/**2**) + c → O(**log n**)
+
+### Stack Implementation Memory Trick
+**"Array: Negative one, Plus one"**
+- Empty when top = **-1**
+- Size = top **+ 1**
+
+**"Linked: Null, Head"**
+- Empty when top = **null**
+- Top = **head** of list
+
+---
+
+## 8.6 Last-Minute Review (5 Minutes Before Exam)
+
+### Recursion Essentials
+1. Base case stops recursion (e.g., `n ≤ 1`, `index >= length`, `empty`)
+2. Recursive case makes problem smaller (e.g., `n-1`, `index+1`, `n/2`)
+3. Must progress toward base case every call
+4. Time = (# calls) × (work per call)
+5. Space = max call stack depth
+
+**Common mistakes:** No base, wrong base, no progress, deep recursion
+
+### Stack Essentials
+1. LIFO: Last in, first out
+2. Operations: push, pop, peek, isEmpty - all O(1)
+3. Array: top=-1 (empty), top=capacity-1 (full), size=top+1
+4. Linked: top=null (empty), top=head, no capacity limit
+5. Uses: balance ( ), postfix eval, reverse, DFS, backtrack
+
+**Common mistakes:** Pop empty, push full, forget isEmpty check, wrong size
+
+### Quick Patterns
+- **Factorial:** `if (n ≤ 1) return 1; return n * factorial(n-1);`
+- **Sum array:** `if (i >= len) return 0; return arr[i] + sum(i+1);`
+- **Binary search:** `if (L > R) return -1; mid = (L+R)/2; if found return mid; else search half;`
+- **Balance ( ):** `for ch: if ( push; if ) pop&match; end: empty?`
+- **Postfix:** `for token: if # push; if op: pop 2, compute, push;`
+
+### If You Forget Something
+- **Recursion:** Think "What's smallest case? How to get smaller?"
+- **Stack:** Think "LIFO like plates - last on top, first off"
+- **Complexity:** Count operations, recursion = depth of tree
+
+---
+
 **End of MIDTERM_PREP_PART3.md**
 
 *For Linked Lists content, see MIDTERM_PREP_PART2.md*
