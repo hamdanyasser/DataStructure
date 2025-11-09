@@ -1265,8 +1265,1276 @@ Make sure to handle the case where b might be larger than a initially. The algor
 
 ---
 
+# 5. STACKS
+
+## 5.1 Stack Fundamentals
+
+### ① One-Line Concept Summary
+A stack is a Last-In-First-Out (LIFO) linear data structure where elements are added and removed from the same end (called the "top"), like a stack of plates where you can only access the topmost plate.
+
+### ② How to Think About It
+
+**Mental Model: Stack of Plates**
+- Add plate on top (push)
+- Remove plate from top (pop)
+- Can only see/access the top plate (peek)
+- Can't access plates in the middle without removing top plates
+- Last plate added is first plate removed (LIFO)
+
+**Real-World Analogies:**
+- Stack of books on a desk
+- Browser back button (last page visited = first to go back to)
+- Undo functionality in text editors
+- Function call stack in programming
+
+**LIFO Principle:**
+```
+Push 1 → [1]
+Push 2 → [1, 2]
+Push 3 → [1, 2, 3]
+Pop    → [1, 2]     (removed 3)
+Pop    → [1]        (removed 2)
+```
+
+**Decision Checklist - Use stack when:**
+- ✅ Need LIFO access pattern
+- ✅ Reversing order of elements
+- ✅ Matching pairs (parentheses, brackets, tags)
+- ✅ Depth-first search (DFS) algorithms
+- ✅ Backtracking problems
+- ✅ Expression evaluation (postfix, infix)
+- ✅ Function call management (call stack)
+- ❌ Don't use if need random access by index
+- ❌ Don't use if need FIFO (use queue instead)
+- ❌ Don't use if need to access middle elements frequently
+
+**Key Stack Operations:**
+1. **push(item)** - Add element to top - O(1)
+2. **pop()** - Remove and return top element - O(1)
+3. **peek()/top()** - View top element without removing - O(1)
+4. **isEmpty()** - Check if stack is empty - O(1)
+5. **size()** - Get number of elements - O(1)
+
+**Key Invariants:**
+- Top always points to last added element
+- Empty stack: top = -1 (array) or top = null (linked list)
+- All operations happen at the top only
+- Order is preserved (LIFO)
+
+**Failure Modes:**
+- **Stack Overflow:** Push to full array-based stack
+- **Stack Underflow:** Pop from empty stack
+- **Memory leak:** Not freeing nodes in linked list implementation
+
+### ③ Stack Implementations Overview
+
+**Two Main Implementations:**
+
+1. **Array-Based Stack:**
+   - Fixed or dynamic capacity
+   - Top tracked by index
+   - Fast O(1) operations
+   - Cache-friendly (contiguous memory)
+   - May waste space or need resizing
+
+2. **Linked List-Based Stack:**
+   - No capacity limit (until heap memory exhausted)
+   - Top is head of linked list
+   - O(1) operations
+   - Extra memory for pointers
+   - No resizing needed
+
+**Comparison:**
+
+| Feature | Array-Based | Linked List-Based |
+|---------|-------------|-------------------|
+| Capacity | Fixed or grows | Unlimited (heap) |
+| Memory | Contiguous, cache-friendly | Scattered, pointer overhead |
+| Resize | May need to copy | Never needed |
+| Implementation | Simpler | Slightly more complex |
+| Space Overhead | Wasted if not full | Pointer per element |
+| Use When | Know max size | Size unpredictable |
+
+### ④ Stack Applications
+
+**1. Expression Evaluation:**
+- Infix to postfix conversion
+- Postfix expression evaluation
+- Checking balanced parentheses
+
+**2. Backtracking:**
+- DFS traversal
+- Maze solving
+- N-Queens problem
+- Sudoku solver
+
+**3. Function Calls:**
+- Call stack (runtime stack)
+- Local variables storage
+- Return addresses
+- Recursion management
+
+**4. Parsing:**
+- HTML/XML tag matching
+- Compiler syntax checking
+- Balanced brackets validation
+
+**5. Undo Mechanisms:**
+- Text editor undo/redo
+- Browser back/forward
+- Game state history
+
+**6. Reversing:**
+- Reverse string
+- Reverse array
+- Reverse linked list
+
+### ⑤ Recursion and Stack Relationship
+
+**The Call Stack:**
+- Every function call creates a **stack frame** (activation record)
+- Stack frame contains: parameters, local variables, return address
+- Pushed when function called, popped when function returns
+- Recursion = series of stack frames
+
+**Recursion IS Stack:**
+```java
+// Recursive factorial
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n-1);
+}
+
+// Call stack for factorial(4):
+// [factorial(4)] → n=4
+// [factorial(4), factorial(3)] → n=3
+// [factorial(4), factorial(3), factorial(2)] → n=2
+// [factorial(4), factorial(3), factorial(2), factorial(1)] → n=1, returns 1
+// [factorial(4), factorial(3), factorial(2)] → returns 2
+// [factorial(4), factorial(3)] → returns 6
+// [factorial(4)] → returns 24
+```
+
+**Converting Recursion to Iteration with Explicit Stack:**
+
+Every recursive function can be converted to iterative using a stack:
+
+```java
+// Recursive
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n-1);
+}
+
+// Iterative with stack (conceptual)
+int factorialIterative(int n) {
+    Stack<Integer> stack = new Stack<>();
+    while (n > 1) {
+        stack.push(n);
+        n--;
+    }
+    int result = 1;
+    while (!stack.isEmpty()) {
+        result *= stack.pop();
+    }
+    return result;
+}
+```
+
+**Why Convert?**
+- Avoid stack overflow for deep recursion
+- More control over stack size
+- Sometimes more efficient (avoid function call overhead)
+
+**Stack Overflow:**
+- Too many recursive calls → call stack exceeds limit
+- Java default stack size: ~1MB (varies by JVM)
+- Solution: Use iteration or explicit stack with heap memory
+
+---
+
+## 5.2 Array-Based Stack Implementation
+
+### ① Objective
+Implement a stack using a fixed-size array with top index tracking, supporting push, pop, peek, isEmpty operations in O(1) time.
+
+### ② Summary
+**Structure:**
+- Array to hold elements
+- `top` index pointing to last pushed element
+- `capacity` for maximum size
+- `top = -1` means empty stack
+
+**Key Operations:**
+- **push:** Increment top, add at array[top]
+- **pop:** Return array[top], decrement top
+- **peek:** Return array[top] without changing top
+
+### ③ Algorithm
+
+**Initialization:**
+1. Create array of given capacity
+2. Set top = -1 (empty)
+
+**push(item):**
+1. Check if full (top == capacity - 1)
+2. If full, throw StackOverflowException
+3. Increment top
+4. Set array[top] = item
+
+**pop():**
+1. Check if empty (top == -1)
+2. If empty, throw StackUnderflowException
+3. Save item = array[top]
+4. Decrement top
+5. Return item
+
+**peek():**
+1. Check if empty
+2. Return array[top]
+
+### ④ Complexity Analysis
+
+| Operation | Time | Space | Explanation |
+|-----------|------|-------|-------------|
+| push | O(1) | O(1) | Direct array access |
+| pop | O(1) | O(1) | Direct array access |
+| peek | O(1) | O(1) | Direct array access |
+| isEmpty | O(1) | O(1) | Check top == -1 |
+| size | O(1) | O(1) | Return top + 1 |
+
+**Overall Space:** O(n) where n = capacity
+
+### ⑤ Edge Cases & Pitfalls
+
+**Pitfall 1: Push to full stack**
+```java
+// ❌ WRONG - array index out of bounds
+array[++top] = item;  // No check if full!
+
+// ✅ CORRECT
+if (isFull()) throw new StackOverflowError("Stack full");
+array[++top] = item;
+```
+
+**Pitfall 2: Pop from empty stack**
+```java
+// ❌ WRONG - returns garbage or crashes
+return array[top--];  // No check if empty!
+
+// ✅ CORRECT
+if (isEmpty()) throw new EmptyStackException();
+return array[top--];
+```
+
+**Pitfall 3: Off-by-one in size calculation**
+```java
+// If top = 2, we have elements at indices 0, 1, 2 → size = 3
+int size() { return top + 1; }  // ✅ CORRECT, not just 'top'
+```
+
+**Edge Cases:**
+- Empty stack (top = -1)
+- Full stack (top = capacity - 1)
+- Single element (top = 0)
+- Push-pop-push sequence
+
+### ⑥ Java 17 Implementation
+
+```java
+import java.util.EmptyStackException;
+
+public class ArrayStack {
+    private int[] array;
+    private int top;
+    private int capacity;
+
+    /**
+     * Constructor with specified capacity
+     */
+    public ArrayStack(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity must be positive");
+        }
+        this.capacity = capacity;
+        this.array = new int[capacity];
+        this.top = -1;  // Empty stack
+    }
+
+    /**
+     * Push element onto stack - O(1)
+     */
+    public void push(int item) {
+        if (isFull()) {
+            throw new StackOverflowError("Stack is full (capacity: " + capacity + ")");
+        }
+        array[++top] = item;
+    }
+
+    /**
+     * Pop element from stack - O(1)
+     */
+    public int pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return array[top--];
+    }
+
+    /**
+     * Peek at top element without removing - O(1)
+     */
+    public int peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return array[top];
+    }
+
+    /**
+     * Check if stack is empty - O(1)
+     */
+    public boolean isEmpty() {
+        return top == -1;
+    }
+
+    /**
+     * Check if stack is full - O(1)
+     */
+    public boolean isFull() {
+        return top == capacity - 1;
+    }
+
+    /**
+     * Get current size - O(1)
+     */
+    public int size() {
+        return top + 1;
+    }
+
+    /**
+     * Get capacity
+     */
+    public int capacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) return "[]";
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i <= top; i++) {
+            sb.append(array[i]);
+            if (i < top) sb.append(", ");
+        }
+        sb.append("] <- top");
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        ArrayStack stack = new ArrayStack(5);
+
+        // Test 1: isEmpty on new stack
+        assert stack.isEmpty() : "New stack should be empty";
+        assert stack.size() == 0 : "New stack size should be 0";
+        System.out.println("New stack: " + stack);
+
+        // Test 2: Push elements
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        assert stack.size() == 3 : "Size should be 3 after 3 pushes";
+        assert !stack.isEmpty() : "Stack should not be empty";
+        System.out.println("After pushes: " + stack);
+
+        // Test 3: Peek
+        int topValue = stack.peek();
+        assert topValue == 30 : "Top should be 30";
+        assert stack.size() == 3 : "Peek should not change size";
+        System.out.println("Peek: " + topValue);
+
+        // Test 4: Pop
+        int popped = stack.pop();
+        assert popped == 30 : "Popped should be 30";
+        assert stack.size() == 2 : "Size should be 2 after pop";
+        System.out.println("Popped: " + popped + ", Stack: " + stack);
+
+        // Test 5: Fill to capacity
+        stack.push(40);
+        stack.push(50);
+        stack.push(60);
+        assert stack.isFull() : "Stack should be full";
+        assert stack.size() == 5 : "Size should be 5 (capacity)";
+        System.out.println("Full stack: " + stack);
+
+        // Test 6: Overflow
+        try {
+            stack.push(70);
+            assert false : "Should throw StackOverflowError";
+        } catch (StackOverflowError e) {
+            System.out.println("Overflow caught correctly: " + e.getMessage());
+        }
+
+        // Test 7: Empty the stack
+        while (!stack.isEmpty()) {
+            stack.pop();
+        }
+        assert stack.isEmpty() : "Stack should be empty";
+        System.out.println("After emptying: " + stack);
+
+        // Test 8: Underflow
+        try {
+            stack.pop();
+            assert false : "Should throw EmptyStackException";
+        } catch (EmptyStackException e) {
+            System.out.println("Underflow caught correctly");
+        }
+
+        System.out.println("\n✅ All array stack tests passed!");
+    }
+}
+```
+
+### ⑦ Expected Output
+
+```
+New stack: []
+After pushes: [10, 20, 30] <- top
+Peek: 30
+Popped: 30, Stack: [10, 20] <- top
+Full stack: [10, 20, 40, 50, 60] <- top
+Overflow caught correctly: Stack is full (capacity: 5)
+After emptying: []
+Underflow caught correctly
+
+✅ All array stack tests passed!
+```
+
+### ⑧ Exam Checklist
+
+- ✅ **Structure:** Array + top index + capacity
+- ✅ **Empty:** top = -1
+- ✅ **Full:** top = capacity - 1
+- ✅ **Size:** top + 1
+- ✅ **Push:** Check full, then array[++top] = item
+- ✅ **Pop:** Check empty, then return array[top--]
+- ✅ **Peek:** Return array[top] without changing top
+- ✅ **All operations:** O(1) time
+- ✅ **Edge cases:** Empty, full, underflow, overflow
+
+---
+
+## 5.3 Linked List-Based Stack Implementation
+
+### ① Objective
+Implement a stack using a singly linked list where the head serves as the top, providing unlimited capacity (until heap exhaustion) with O(1) operations.
+
+### ② Summary
+**Structure:**
+- Linked list with nodes containing data and next pointer
+- `top` reference points to head of list (most recent element)
+- No capacity limit (dynamic size)
+- Push = addFirst, Pop = removeFirst
+
+**Key Insight:**
+- Top of stack = head of linked list
+- Push new element at head (O(1))
+- Pop from head (O(1))
+- No array resizing needed
+
+### ③ Algorithm
+
+**Node Structure:**
+```
+class Node {
+    int data;
+    Node next;
+}
+```
+
+**Initialization:**
+1. Set top = null (empty)
+2. Set size = 0
+
+**push(item):**
+1. Create new node with data
+2. Set newNode.next = top
+3. Set top = newNode
+4. Increment size
+
+**pop():**
+1. Check if empty (top == null)
+2. Save data = top.data
+3. Set top = top.next
+4. Decrement size
+5. Return data
+
+**peek():**
+1. Check if empty
+2. Return top.data
+
+### ④ Complexity Analysis
+
+| Operation | Time | Space | Explanation |
+|-----------|------|-------|-------------|
+| push | O(1) | O(1) | Add at head |
+| pop | O(1) | O(1) | Remove from head |
+| peek | O(1) | O(1) | Access head |
+| isEmpty | O(1) | O(1) | Check top == null |
+| size | O(1) | O(1) | Return cached size |
+
+**Overall Space:** O(n) where n = number of elements (plus pointer overhead)
+
+### ⑤ Edge Cases & Pitfalls
+
+**Pitfall 1: Null pointer on empty stack**
+```java
+// ❌ WRONG - NPE if top is null
+return top.data;
+
+// ✅ CORRECT
+if (isEmpty()) throw new EmptyStackException();
+return top.data;
+```
+
+**Pitfall 2: Not updating top reference**
+```java
+// ❌ WRONG - top not moved
+Node newNode = new Node(item);
+newNode.next = top;
+// Missing: top = newNode;
+
+// ✅ CORRECT
+Node newNode = new Node(item);
+newNode.next = top;
+top = newNode;  // Must update top!
+```
+
+**Edge Cases:**
+- Empty stack (top = null)
+- Single element (top.next = null)
+- Push-pop-push sequence
+- No capacity limit (until OutOfMemoryError)
+
+### ⑥ Java 17 Implementation
+
+```java
+import java.util.EmptyStackException;
+
+class StackNode {
+    int data;
+    StackNode next;
+
+    StackNode(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class LinkedListStack {
+    private StackNode top;
+    private int size;
+
+    /**
+     * Constructor - creates empty stack
+     */
+    public LinkedListStack() {
+        this.top = null;
+        this.size = 0;
+    }
+
+    /**
+     * Push element onto stack - O(1)
+     */
+    public void push(int item) {
+        StackNode newNode = new StackNode(item);
+        newNode.next = top;
+        top = newNode;
+        size++;
+    }
+
+    /**
+     * Pop element from stack - O(1)
+     */
+    public int pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        int data = top.data;
+        top = top.next;
+        size--;
+        return data;
+    }
+
+    /**
+     * Peek at top element - O(1)
+     */
+    public int peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return top.data;
+    }
+
+    /**
+     * Check if empty - O(1)
+     */
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    /**
+     * Get size - O(1)
+     */
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) return "[]";
+
+        StringBuilder sb = new StringBuilder("[");
+        StackNode current = top;
+        while (current != null) {
+            sb.append(current.data);
+            if (current.next != null) sb.append(", ");
+            current = current.next;
+        }
+        sb.append("] <- top at left");
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedListStack stack = new LinkedListStack();
+
+        // Test 1: Empty stack
+        assert stack.isEmpty() : "New stack should be empty";
+        assert stack.size() == 0 : "Size should be 0";
+        System.out.println("New stack: " + stack);
+
+        // Test 2: Push elements
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        assert stack.size() == 3 : "Size should be 3";
+        assert stack.peek() == 30 : "Top should be 30";
+        System.out.println("After pushes: " + stack);
+
+        // Test 3: Pop
+        int popped = stack.pop();
+        assert popped == 30 : "Popped should be 30";
+        assert stack.size() == 2 : "Size should be 2";
+        System.out.println("Popped: " + popped + ", Stack: " + stack);
+
+        // Test 4: Push more (no capacity limit!)
+        for (int i = 40; i <= 100; i += 10) {
+            stack.push(i);
+        }
+        System.out.println("After more pushes: " + stack);
+        assert stack.size() == 9 : "Size should be 9";
+
+        // Test 5: Empty the stack
+        int count = 0;
+        while (!stack.isEmpty()) {
+            stack.pop();
+            count++;
+        }
+        assert count == 9 : "Should have popped 9 elements";
+        assert stack.isEmpty() : "Should be empty";
+        System.out.println("After emptying: " + stack);
+
+        // Test 6: Underflow
+        try {
+            stack.pop();
+            assert false : "Should throw exception";
+        } catch (EmptyStackException e) {
+            System.out.println("Underflow caught correctly");
+        }
+
+        // Test 7: Push-pop sequence
+        stack.push(100);
+        stack.push(200);
+        assert stack.pop() == 200 : "LIFO order";
+        assert stack.pop() == 100 : "LIFO order";
+        assert stack.isEmpty() : "Should be empty";
+
+        System.out.println("\n✅ All linked list stack tests passed!");
+    }
+}
+```
+
+### ⑦ Expected Output
+
+```
+New stack: []
+After pushes: [30, 20, 10] <- top at left
+Popped: 30, Stack: [20, 10] <- top at left
+After more pushes: [100, 90, 80, 70, 60, 50, 40, 20, 10] <- top at left
+After emptying: []
+Underflow caught correctly
+
+✅ All linked list stack tests passed!
+```
+
+### ⑧ Exam Checklist
+
+- ✅ **Structure:** Linked list with top = head
+- ✅ **Empty:** top = null
+- ✅ **No capacity limit:** Only heap memory constraint
+- ✅ **Push:** Create node, set next = top, update top
+- ✅ **Pop:** Save data, move top = top.next
+- ✅ **Peek:** Return top.data
+- ✅ **All operations:** O(1)
+- ✅ **Advantage:** No resizing, unlimited size
+- ✅ **Disadvantage:** Pointer overhead, not cache-friendly
+
+---
+
+## 5.4 Stack Application: Balanced Parentheses
+
+### ① Objective
+Check if a string containing parentheses, brackets, and braces is balanced using a stack.
+
+### ② Summary
+**Problem:** Validate that every opening bracket has a matching closing bracket in correct order.
+
+**Examples:**
+- `"()"` → balanced
+- `"()[]{}"` → balanced
+- `"([{}])"` → balanced
+- `"([)]"` → NOT balanced (wrong order)
+- `"((("` → NOT balanced (no closing)
+
+**Stack Strategy:**
+- Push opening brackets onto stack
+- When closing bracket found, pop and check if it matches
+- At end, stack should be empty
+
+### ③ Algorithm
+
+1. Create empty stack
+2. For each character in string:
+   - If opening bracket `(`, `[`, `{`: push onto stack
+   - If closing bracket `)`, `]`, `}`:
+     - Check if stack is empty → return false (no matching opener)
+     - Pop from stack
+     - Check if popped bracket matches current closer → if not, return false
+3. After processing all characters:
+   - If stack empty → return true (all matched)
+   - If stack not empty → return false (unmatched openers)
+
+### ④ Complexity
+- **Time:** O(n) - single pass through string
+- **Space:** O(n) - worst case all opening brackets
+
+### ⑤ Edge Cases
+- Empty string → balanced (true)
+- Only opening brackets → false
+- Only closing brackets → false
+- Mismatched types: `"([)]"` → false
+- Extra closing: `"())"` → false
+- Extra opening: `"(()"` → false
+
+### ⑥ Java 17 Implementation
+
+```java
+import java.util.Stack;
+
+public class BalancedParentheses {
+
+    /**
+     * Check if string has balanced parentheses/brackets/braces
+     */
+    public static boolean isBalanced(String str) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : str.toCharArray()) {
+            // Opening brackets - push to stack
+            if (ch == '(' || ch == '[' || ch == '{') {
+                stack.push(ch);
+            }
+            // Closing brackets - check match
+            else if (ch == ')' || ch == ']' || ch == '}') {
+                // No matching opener
+                if (stack.isEmpty()) {
+                    return false;
+                }
+
+                char top = stack.pop();
+
+                // Check if types match
+                if (ch == ')' && top != '(') return false;
+                if (ch == ']' && top != '[') return false;
+                if (ch == '}' && top != '{') return false;
+            }
+            // Ignore other characters (for general strings)
+        }
+
+        // All openers must have closers
+        return stack.isEmpty();
+    }
+
+    /**
+     * Helper to check if opening bracket
+     */
+    private static boolean isOpening(char ch) {
+        return ch == '(' || ch == '[' || ch == '{';
+    }
+
+    /**
+     * Helper to check if closing bracket
+     */
+    private static boolean isClosing(char ch) {
+        return ch == ')' || ch == ']' || ch == '}';
+    }
+
+    /**
+     * Helper to check if brackets match
+     */
+    private static boolean matches(char opening, char closing) {
+        return (opening == '(' && closing == ')') ||
+               (opening == '[' && closing == ']') ||
+               (opening == '{' && closing == '}');
+    }
+
+    /**
+     * Alternative cleaner implementation
+     */
+    public static boolean isBalancedClean(String str) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : str.toCharArray()) {
+            if (isOpening(ch)) {
+                stack.push(ch);
+            } else if (isClosing(ch)) {
+                if (stack.isEmpty() || !matches(stack.pop(), ch)) {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        // Test balanced cases
+        assert isBalanced("()") : "Simple pair";
+        assert isBalanced("()[]{}") : "Multiple types";
+        assert isBalanced("([{}])") : "Nested";
+        assert isBalanced("{[()]}") : "Complex nesting";
+        assert isBalanced("") : "Empty string";
+
+        // Test unbalanced cases
+        assert !isBalanced("(") : "Only opener";
+        assert !isBalanced(")") : "Only closer";
+        assert !isBalanced("([)]") : "Wrong order";
+        assert !isBalanced("(()") : "Missing closer";
+        assert !isBalanced("())") : "Extra closer";
+        assert !isBalanced("(()()))") : "Unmatched";
+
+        // Test with other characters
+        assert isBalanced("int[] arr = new int[10];") : "Valid Java code";
+        assert isBalanced("if (x > 0) { return arr[x]; }") : "Valid code";
+
+        // Display results
+        String[] tests = {"()", "()[]{}", "([{}])", "([)]", "(((", "())", ""};
+        System.out.println("Balanced Parentheses Checker:\n");
+        for (String test : tests) {
+            boolean result = isBalanced(test);
+            System.out.println("\"" + test + "\" → " + (result ? "✓ balanced" : "✗ NOT balanced"));
+        }
+
+        // Verify both implementations agree
+        for (String test : tests) {
+            assert isBalanced(test) == isBalancedClean(test) : "Implementations should agree";
+        }
+
+        System.out.println("\n✅ All balanced parentheses tests passed!");
+    }
+}
+```
+
+### ⑦ Expected Output
+
+```
+Balanced Parentheses Checker:
+
+"()" → ✓ balanced
+"()[]{}" → ✓ balanced
+"([{}])" → ✓ balanced
+"([)]" → ✗ NOT balanced
+"(((" → ✗ NOT balanced
+"())" → ✗ NOT balanced
+"" → ✓ balanced
+
+✅ All balanced parentheses tests passed!
+```
+
+### ⑧ Checklist
+
+- ✅ **Opening bracket:** Push to stack
+- ✅ **Closing bracket:** Pop and check match
+- ✅ **Empty stack on closer:** Return false
+- ✅ **End with empty stack:** All matched
+- ✅ **Time:** O(n), **Space:** O(n)
+- ✅ **Edge cases:** Empty string, only openers, only closers
+
+---
+
+## 5.5 Practice Problems
+
+### Problem 1: Reverse a String Using Stack
+**Difficulty:** Easy
+
+**Problem:** Use a stack to reverse a string.
+
+**Example:**
+- Input: "hello" → Output: "olleh"
+- Input: "Stack" → Output: "kcatS"
+
+**Hint:** Push all characters onto a stack, then pop them all to build the reversed string. Remember that stacks are LIFO, so the last character pushed will be the first character in the result.
+
+**Key concepts tested:**
+- Basic stack operations
+- LIFO property for reversal
+- String building
+
+---
+
+### Problem 2: Evaluate Postfix Expression
+**Difficulty:** Medium
+
+**Problem:** Evaluate a postfix (Reverse Polish Notation) expression using a stack.
+
+**Example:**
+- Input: "5 3 +" → Output: 8
+- Input: "5 3 4 + *" → Output: 35 (5 * (3 + 4))
+- Input: "2 3 1 * + 9 -" → Output: -4 ((2 + (3 * 1)) - 9)
+
+**Hint:**
+- Scan left to right
+- If operand (number): push to stack
+- If operator (+, -, *, /): pop two operands, apply operator, push result
+- Final stack should have one element (the answer)
+- Be careful with order for non-commutative operators: for "a b -", compute a - b (not b - a)
+
+**Key concepts tested:**
+- Stack for expression evaluation
+- Operator precedence handling
+- Order of operands
+
+---
+
+### Problem 3: Next Greater Element
+**Difficulty:** Medium-Hard
+
+**Problem:** For each element in an array, find the next greater element to its right. If none exists, return -1.
+
+**Example:**
+- Input: [4, 5, 2, 10, 8] → Output: [5, 10, 10, -1, -1]
+- Input: [1, 2, 3, 4, 5] → Output: [2, 3, 4, 5, -1]
+- Input: [5, 4, 3, 2, 1] → Output: [-1, -1, -1, -1, -1]
+
+**Hint:**
+- Scan from right to left
+- Maintain stack of elements seen so far
+- For current element: pop all smaller elements from stack (they can't be answer)
+- Top of stack (if exists) is next greater element
+- Push current element to stack
+- Time: O(n) - each element pushed/popped once
+
+**Key concepts tested:**
+- Stack for maintaining potential candidates
+- Monotonic stack pattern
+- Right-to-left processing
+
+---
+
+### Problem 4: Valid Stack Sequences
+**Difficulty:** Medium-Hard
+
+**Problem:** Given two sequences `pushed` and `popped`, determine if they could be the result of valid push and pop operations on an initially empty stack.
+
+**Example:**
+- pushed = [1,2,3,4,5], popped = [4,5,3,2,1] → true
+  - Push 1,2,3,4, pop 4, push 5, pop 5,3,2,1
+- pushed = [1,2,3,4,5], popped = [4,3,5,1,2] → false
+  - Can't get 1,2 at end
+
+**Hint:**
+- Simulate the operations with an actual stack
+- For each element in popped sequence:
+  - Keep pushing from pushed sequence until we find the target
+  - If found on top, pop it
+  - If we run out of elements to push and top doesn't match, return false
+- If we successfully pop all elements, return true
+
+**Key concepts tested:**
+- Stack simulation
+- Understanding push/pop interleaving
+- Validation logic
+
+---
+
+### Problem 5: Min Stack (Stack with O(1) min)
+**Difficulty:** Hard
+
+**Problem:** Design a stack that supports push, pop, top, and retrieving the minimum element in O(1) time.
+
+**Operations:**
+- push(x): Push element x onto stack
+- pop(): Remove element on top
+- top(): Get top element
+- getMin(): Retrieve minimum element
+
+**Example:**
+```
+MinStack stack = new MinStack();
+stack.push(5);   // stack: [5], min: 5
+stack.push(2);   // stack: [5,2], min: 2
+stack.push(3);   // stack: [5,2,3], min: 2
+stack.getMin();  // returns 2
+stack.pop();     // stack: [5,2], min: 2
+stack.getMin();  // returns 2
+stack.pop();     // stack: [5], min: 5
+stack.getMin();  // returns 5
+```
+
+**Hint:**
+- Use two stacks: one for actual values, one for minimums
+- When pushing x:
+  - Push x to main stack
+  - Push min(x, currentMin) to min stack
+- When popping: pop from both stacks
+- getMin(): peek at min stack
+- Alternative: Store pairs (value, min_at_this_point) in single stack
+
+**Key concepts tested:**
+- Auxiliary data structure
+- Maintaining invariant
+- O(1) operations
+- Space-time tradeoff
+
+---
+
+## 5.6 How to Think About Stacks - Mental Framework
+
+### The LIFO Mindset
+
+**Key Question:** "Does order matter and should the last thing in be the first thing out?"
+
+**Visual Thinking:**
+```
+Think of a stack like a pringles can:
+- Can only access the top chip
+- Must remove top chip to access ones below
+- Last chip put in = first chip taken out
+```
+
+**When to Use Stack Checklist:**
+
+1. **Reversal?** → Stack naturally reverses
+2. **Matching pairs?** → Stack for tracking openers
+3. **Backtracking?** → Stack stores decision points
+4. **Nested structure?** → Stack tracks levels
+5. **DFS traversal?** → Stack (vs queue for BFS)
+6. **Undo/redo?** → Stack of states
+7. **Function calls?** → Already using call stack!
+
+### Problem-Solving Pattern
+
+**Step 1: Identify LIFO pattern**
+- Is most recent item most important?
+- Need to process in reverse order?
+- Nested or hierarchical structure?
+
+**Step 2: Decide what to push**
+- Opening brackets? Push them
+- Indices? Push for later lookup
+- Actual values? Push data
+- State snapshots? Push entire state
+
+**Step 3: Decide when to pop**
+- Found matching closer?
+- Reached end of nested level?
+- Need to backtrack?
+- Processing complete for top item?
+
+**Step 4: What does empty stack mean?**
+- All matched?
+- Back to start?
+- No more options?
+
+### Common Stack Patterns
+
+**Pattern 1: Matching/Pairing**
+```
+For each item:
+  If opener → push
+  If closer → pop and verify match
+```
+
+**Pattern 2: Monotonic Stack**
+```
+Maintain stack in increasing/decreasing order
+For each element:
+  While stack top violates order: pop
+  Process with current top
+  Push current element
+```
+
+**Pattern 3: State Tracking**
+```
+Push state before making choice
+Process...
+Pop state to backtrack
+```
+
+**Pattern 4: Reversal**
+```
+Push all elements
+Pop all elements (now reversed)
+```
+
+---
+
+## 5.7 Stack Cheat Sheet
+
+### Quick Reference
+
+**Core Operations:**
+```java
+Stack<Integer> stack = new Stack<>();
+stack.push(x);       // Add to top - O(1)
+int x = stack.pop(); // Remove from top - O(1)
+int x = stack.peek(); // View top - O(1)
+boolean empty = stack.isEmpty(); // Check empty - O(1)
+int size = stack.size(); // Get size - O(1)
+```
+
+**Implementation Choice:**
+```
+Array-based:
+  ✓ When: Known max size, cache performance matters
+  ✗ When: Size unpredictable, frequent resizing
+
+Linked List-based:
+  ✓ When: Size unknown, no capacity limit needed
+  ✗ When: Memory overhead matters, cache performance critical
+```
+
+**Time Complexities:**
+| Operation | Array | Linked List |
+|-----------|-------|-------------|
+| push | O(1)* | O(1) |
+| pop | O(1) | O(1) |
+| peek | O(1) | O(1) |
+| isEmpty | O(1) | O(1) |
+| size | O(1) | O(1) |
+
+*O(1) amortized if dynamic array with doubling
+
+**Space Complexity:**
+- Array: O(capacity) - may waste space
+- Linked List: O(n) + pointer overhead
+
+### Common Errors & Fixes
+
+| Error | Wrong Code | Correct Code |
+|-------|-----------|--------------|
+| Pop empty | `stack.pop()` | `if (!stack.isEmpty()) stack.pop()` |
+| Push to full (array) | `arr[++top] = x` | `if (!isFull()) arr[++top] = x` |
+| Forget to update top | `arr[top] = x` | `arr[++top] = x` |
+| Wrong size | `return top` | `return top + 1` |
+
+### Problem Recognition
+
+**"Use a stack when you see:"**
+- ✅ "Balanced", "Matching", "Valid" (parentheses)
+- ✅ "Reverse" anything
+- ✅ "DFS", "Backtrack"
+- ✅ "Next greater/smaller element"
+- ✅ "Undo", "History"
+- ✅ "Evaluate expression" (postfix)
+- ✅ "Nested" structures
+
+**"Don't use stack when you see:"**
+- ❌ "FIFO", "First in first out" (use queue)
+- ❌ "Random access", "Access ith element" (use array/list)
+- ❌ "Sort" (usually not stack)
+- ❌ "Find all" (unless DFS involved)
+
+### Recursion ↔ Stack Conversion
+
+**Every recursive function CAN be rewritten with explicit stack:**
+
+```java
+// Recursive DFS
+void dfs(Node node) {
+    if (node == null) return;
+    process(node);
+    dfs(node.left);
+    dfs(node.right);
+}
+
+// Iterative with stack
+void dfsIterative(Node root) {
+    Stack<Node> stack = new Stack<>();
+    stack.push(root);
+    while (!stack.isEmpty()) {
+        Node node = stack.pop();
+        if (node == null) continue;
+        process(node);
+        stack.push(node.right); // Push right first!
+        stack.push(node.left);  // So left is processed first
+    }
+}
+```
+
+### Memory Limits
+
+**Stack Overflow:**
+- Recursion too deep → switch to iterative + stack
+- Java default: ~1MB stack (~1000-10000 calls)
+- Iterative stack uses heap (much larger)
+
+**Prevention:**
+- Limit recursion depth
+- Use iterative with explicit stack
+- Tail recursion (if language optimizes)
+- Increase JVM stack size: `-Xss2m`
+
+### Exam Strategy
+
+**When you see a stack problem:**
+
+1. **Identify** what goes on stack
+2. **Decide** when to push/pop
+3. **Determine** what empty stack means
+4. **Handle** edge cases:
+   - Empty stack
+   - Single element
+   - Pop from empty (underflow)
+   - Push to full (overflow for array)
+5. **Analyze** complexity (usually O(n) time, O(n) space)
+6. **Test** with small example by hand
+
+**Common Exam Questions:**
+- Implement stack with array/linked list
+- Balanced parentheses
+- Evaluate postfix expression
+- Reverse using stack
+- Convert recursion to iteration
+- Min/max stack in O(1)
+- Two stacks in one array
+
+---
+
 **End of MIDTERM_PREP_PART3.md**
 
-*For Stacks and Queue content, see MIDTERM_PREP_PART2.md*
+*For Linked Lists content, see MIDTERM_PREP_PART2.md*
+*For Queues content, see MIDTERM_PREP_PART2.md*
 *For Complexity Analysis theory, see curriculum/complexity_analysis.md*
 *For general study guide, see MIDTERM_PREP_GUIDE.md*
