@@ -2532,6 +2532,219 @@ void dfsIterative(Node root) {
 
 ---
 
+## 4.5 Additional Recursion Practice Problems
+
+### Problem 6: Generate All Subsets (Power Set)
+**Difficulty:** Medium-Hard
+
+**Problem:** Given an array of distinct integers, generate all possible subsets (the power set) using recursion.
+
+**Example:**
+- Input: [1, 2, 3]
+- Output: [[], [1], [2], [3], [1,2], [1,3], [2,3], [1,2,3]]
+
+**Hint:** For each element, you have two choices: include it or exclude it. Use recursion to make this choice for each element. Base case: when you've processed all elements, add current subset to result. Recursive case: recursively call with (1) current element excluded, (2) current element included. Think of it as a binary decision tree of depth n.
+
+**Key concepts tested:**
+- Binary recursion (two choices per element)
+- Building result through backtracking
+- Time complexity: O(2^n) - each element has 2 choices
+
+---
+
+### Problem 7: Count Occurrences in Array
+**Difficulty:** Easy-Medium
+
+**Problem:** Write a recursive function to count how many times a target value appears in an array.
+
+**Example:**
+- Input: arr = [1, 2, 3, 2, 4, 2], target = 2
+- Output: 3
+
+**Hint:** Base case: empty array or index out of bounds returns 0. Recursive case: if current element equals target, return 1 + count in rest of array; otherwise return 0 + count in rest of array. Use index-based recursion starting from 0.
+
+**Key concepts tested:**
+- Linear recursion with index
+- Conditional counting
+- Array traversal recursively
+
+---
+
+### Problem 8: Merge Sort
+**Difficulty:** Hard
+
+**Problem:** Implement the merge sort algorithm recursively to sort an array in ascending order.
+
+**Example:**
+- Input: [38, 27, 43, 3, 9, 82, 10]
+- Output: [3, 9, 10, 27, 38, 43, 82]
+
+**Hint:** Divide and conquer approach. Base case: array of size 0 or 1 is already sorted. Recursive case: (1) divide array into two halves, (2) recursively sort each half, (3) merge the two sorted halves. The merge step is key: use two pointers to combine sorted arrays. Time complexity: O(n log n).
+
+**Key concepts tested:**
+- Divide and conquer recursion
+- Multiple recursive calls
+- Merging sorted arrays
+- Classic sorting algorithm
+
+---
+
+### Problem 9: Path Sum in Binary Tree
+**Difficulty:** Medium-Hard
+
+**Problem:** Given a binary tree and a target sum, determine if there exists a root-to-leaf path where the sum of node values equals the target.
+
+**Example:**
+```
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \      \
+7    2      1
+```
+- Input: target = 22
+- Output: true (path: 5→4→11→2)
+
+**Hint:** Base case: if node is null, return false; if leaf node, check if value equals remaining sum. Recursive case: subtract current node's value from target, then recursively check left subtree OR right subtree with new target. Think: "Can I make this sum using left path? If not, can I make it using right path?"
+
+**Key concepts tested:**
+- Tree recursion
+- Path tracking
+- Boolean return with OR logic
+- Requires tree node structure: `class TreeNode { int val; TreeNode left, right; }`
+
+---
+
+### Problem 10: Print All Permutations of String
+**Difficulty:** Hard
+
+**Problem:** Generate all permutations of a string recursively.
+
+**Example:**
+- Input: "ABC"
+- Output: ["ABC", "ACB", "BAC", "BCA", "CAB", "CBA"]
+
+**Hint:** Backtracking approach. For each position, try every unused character. Base case: when you've used all characters, add current permutation to result. Recursive case: for each remaining character, (1) add it to current permutation, (2) mark as used, (3) recurse on remaining positions, (4) backtrack by unmarking. Alternative: swap approach - swap each character with first position, recurse on rest, swap back. Time: O(n!).
+
+**Key concepts tested:**
+- Backtracking recursion
+- State management (used/unused)
+- Combinatorial explosion
+- Classic interview problem
+
+---
+
+## 5.8 Additional Stack Practice Problems
+
+### Problem 6: Implement Queue Using Two Stacks
+**Difficulty:** Medium
+
+**Problem:** Implement a queue using only two stacks. Support enqueue (add to rear) and dequeue (remove from front) operations.
+
+**Example:**
+```
+Queue q = new Queue();
+q.enqueue(1);
+q.enqueue(2);
+q.enqueue(3);
+q.dequeue(); // returns 1
+q.dequeue(); // returns 2
+```
+
+**Hint:** Use two stacks: stack1 for enqueue, stack2 for dequeue. Enqueue: always push to stack1 (O(1)). Dequeue: if stack2 is empty, pop all from stack1 and push to stack2 (this reverses order), then pop from stack2. Think: stack1 is input stack, stack2 is output stack. Amortized O(1) for both operations.
+
+**Key concepts tested:**
+- Multiple stack coordination
+- LIFO to FIFO conversion
+- Amortized analysis
+- Data structure design
+
+---
+
+### Problem 7: Largest Rectangle in Histogram
+**Difficulty:** Hard
+
+**Problem:** Given an array representing heights of bars in a histogram, find the area of the largest rectangle that can be formed.
+
+**Example:**
+- Input: heights = [2, 1, 5, 6, 2, 3]
+- Output: 10 (rectangle with height 5-6, width 2)
+
+**Hint:** Use a stack to store indices of bars. Maintain an increasing stack (by height). When you encounter a bar shorter than stack top, it means bars in stack can't extend further right. Pop stack and calculate area with popped bar as height: width = current index - index after new top - 1. Push current index to stack. After processing all bars, pop remaining and calculate. Time: O(n).
+
+**Key concepts tested:**
+- Monotonic stack (increasing)
+- Complex stack manipulation
+- Index storage vs value storage
+- Classic hard problem
+
+---
+
+### Problem 8: Simplify Unix Path
+**Difficulty:** Medium
+
+**Problem:** Given an absolute path for a file (Unix-style), simplify it by resolving `.` (current directory) and `..` (parent directory).
+
+**Example:**
+- Input: "/a/./b/../../c/"
+- Output: "/c"
+- Input: "/../"
+- Output: "/"
+- Input: "/home//foo/"
+- Output: "/home/foo"
+
+**Hint:** Split path by '/'. Use stack for directory names. For each component: if empty or ".", skip; if "..", pop stack (if not empty); otherwise push to stack. After processing all components, build path from stack. Handle edge cases: stay at root if ".." at root level, ignore multiple slashes.
+
+**Key concepts tested:**
+- Stack for path tracking
+- String parsing
+- State management
+- Real-world application
+
+---
+
+### Problem 9: Daily Temperatures
+**Difficulty:** Medium
+
+**Problem:** Given an array of daily temperatures, return an array where each element tells you how many days you have to wait until a warmer temperature. If there's no future warmer day, put 0.
+
+**Example:**
+- Input: [73, 74, 75, 71, 69, 72, 76, 73]
+- Output: [1, 1, 4, 2, 1, 1, 0, 0]
+- Explanation: Day 0 (73°): next warmer is day 1 (74°), wait 1 day
+
+**Hint:** Use a stack to store indices (not temperatures!). Iterate through temperatures. While stack is not empty and current temp > temp at stack top index: this means we found a warmer day for that index, so pop index, calculate days difference (current i - popped index), store in result. Push current index to stack. At end, remaining indices in stack have no warmer day (result = 0). Time: O(n).
+
+**Key concepts tested:**
+- Monotonic stack pattern
+- Index tracking
+- Stack of indices vs values
+- Next greater element variation
+
+---
+
+### Problem 10: Remove K Digits to Make Smallest Number
+**Difficulty:** Hard
+
+**Problem:** Given a string representing a non-negative integer and an integer k, remove k digits from the number to make it the smallest possible number.
+
+**Example:**
+- Input: num = "1432219", k = 3
+- Output: "1219"
+- Explanation: Remove digits 4, 3, 2 to get smallest
+
+**Hint:** Use a monotonic increasing stack. Iterate through digits. While k > 0 and stack not empty and stack top > current digit: pop stack (remove larger digit), decrement k. Push current digit. After processing, if k > 0, remove last k digits. Build result from stack, removing leading zeros. Edge case: if result is empty, return "0".
+
+**Key concepts tested:**
+- Monotonic stack (increasing)
+- Greedy algorithm with stack
+- String manipulation
+- Edge case handling (leading zeros, all removed)
+
+---
+
 # 6. COMPREHENSIVE EXAM CHECKLISTS
 
 ## 6.1 Recursion Exam Checklist
